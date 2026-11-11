@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="my">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>News Studio — သတင်း Video ထုတ်တဲ့ App</title>
+<style>
+  body { font-family: sans-serif; background:#111; color:#eee; margin:0; padding:12px; }
+  h1 { font-size:20px; margin:4px 0 12px; }
+  .card { background:#1c1c22; border:1px solid #333; border-radius:10px; padding:12px; margin-bottom:12px; }
+  .card h2 { font-size:16px; margin:0 0 8px; }
+  .hint { color:#9aa; font-size:13px; }
+  .info { color:#8fd; font-size:13px; min-height:16px; margin-top:6px; white-space:pre-wrap; }
+  .err { color:#f88; font-size:13px; white-space:pre-wrap; margin-top:6px; }
+  input[type=text], textarea, select { width:100%; box-sizing:border-box; background:#0d0d10; color:#eee; border:1px solid #444; border-radius:6px; padding:8px; font-size:14px; }
+  textarea { min-height:110px; }
+  button { background:#2b6cb0; color:#fff; border:0; border-radius:8px; padding:10px 14px; font-size:15px; margin-top:8px; }
+  button.secondary { background:#444; }
+  button:disabled { background:#333; color:#888; }
+  .row { display:flex; gap:8px; align-items:center; flex-wrap:wrap; }
+  progress { width:100%; height:18px; }
+</style>
+</head>
+<body>
+<h1>📰 News Studio <span class="hint">v0.1 scaffold</span></h1>
+
+<div class="card">
+  <h2>Step 1 — သတင်း</h2>
+  <div class="row">
+    <input type="text" id="news-url" placeholder="သတင်း link ကူးထည့်ပါ (https://...)" style="flex:1">
+    <button id="btn-fetch">ဖတ်ပေး</button>
+  </div>
+  <p class="hint">Link ဖတ်မရရင် ဆောင်းပါး စာသား ကို အောက်မှာ တိုက်ရိုက် ကူးထည့်ပါ။</p>
+  <input type="text" id="news-title" placeholder="ခေါင်းစဉ် (link ဖတ်ရင် auto ဖြည့်ပေးမယ်)">
+  <textarea id="news-text" placeholder="ဆောင်းပါး စာသား..."></textarea>
+  <div class="info" id="news-info"></div>
+</div>
+
+<div class="card">
+  <h2>Step 2 — Footage ရွေးပါ</h2>
+  <p class="hint">⚠️ Web app က YouTube ကနေ ကိုယ်တိုင် ဒေါင်းလို့ မရဘူး — ဖုန်းထဲမှာ ရှိတဲ့ footage video ဖိုင်တွေ ရွေးပေးပါ။ Plan က အဲဒီ ဖိုင်တွေထဲက စက္ကန့်တွေကို ရွေးပေးလိမ့်မယ်။</p>
+  <label>🎞️ Video ဖိုင်တွေ <input type="file" id="footage-files" accept="video/*" multiple></label>
+  <div class="info" id="footage-info"></div>
+  <label>🖼️ ပုံတွေ (ရှိရင်) <input type="file" id="image-files" accept="image/*" multiple></label>
+  <div class="info" id="image-info"></div>
+</div>
+
+<div class="card">
+  <h2>Step 3 — Edit Plan (Gemini)</h2>
+  <button id="btn-prompt">📋 Prompt ထုတ်ပေး</button>
+  <textarea id="prompt-out" placeholder="Prompt ဒီမှာ ပေါ်လာမယ် — Gemini ဆီ ကူးပို့ပါ" readonly></textarea>
+  <button id="btn-copy" class="secondary">Prompt ကူးပေး</button>
+  <textarea id="plan-in" placeholder="Gemini ပြန်ပေးတဲ့ JSON plan ကို ဒီမှာ ကူးထည့်ပါ"></textarea>
+  <button id="btn-check">✅ Plan စစ်ပေး</button>
+  <div class="info" id="plan-info"></div>
+  <div class="err" id="plan-err"></div>
+</div>
+
+<div class="card">
+  <h2>Step 4 — အသံ (TTS)</h2>
+  <div class="row">
+    <label>အသံ
+      <select id="tts-voice">
+        <option value="thiha">Thiha (ကျား)</option>
+        <option value="nilar">Nilar (မ)</option>
+      </select>
+    </label>
+  </div>
+  <div class="info" id="tts-lines"></div>
+  <button id="btn-tts" disabled>🔊 အသံ ထုတ်ပေး — နောက် အဆင့်မှာ ပါမယ်</button>
+</div>
+
+<div class="card">
+  <h2>Step 5 — Render</h2>
+  <div class="row">
+    <label>Template
+      <select id="template">
+        <option value="general">အထွေထွေ သတင်း (v0.1)</option>
+      </select>
+    </label>
+  </div>
+  <button id="btn-render" disabled>🎬 Render — နောက် အဆင့်မှာ ပါမယ်</button>
+  <progress id="render-progress" value="0" max="1" style="display:none"></progress>
+  <div class="info" id="render-info"></div>
+  <a id="btn-download" style="display:none">⬇️ Video ဒေါင်းပေး</a>
+</div>
+
+<script type="module" src="js/app.js"></script>
+</body>
+</html>
